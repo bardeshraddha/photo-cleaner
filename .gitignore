@@ -1,0 +1,22 @@
+# Cache files Python creates automatically when you run the tool
+__pycache__/
+
+# Hidden files macOS creates in folders
+.DS_Store
+
+# Photo files: never save real photos in the project's history
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.gif
+*.webp
+*.JPG
+*.JPEG
+*.PNG
+*.HEIC
+*.GIF
+*.WEBP
+
+# Personal Claude Code settings for this computer
+.claude/settings.local.json
