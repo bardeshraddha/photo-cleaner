@@ -54,5 +54,3 @@ photo_cleaner/
   report.py       prints friendly results
 tests/            automatic checks (unittest)
 ```
-
-The full plan is in `~/.claude/plans/clever-meandering-treasure.md`.
