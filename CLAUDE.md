@@ -34,6 +34,14 @@ This Python tool is a **Mac prototype** to prove the detection works. The real g
 - **Before creating or changing any file:** show the full contents in the chat, explain what
   the file is for, and wait for a "go".
 
+## Decision log
+
+- Important decisions are recorded in `docs/decisions.md`.
+- When we make a new decision (a new approach, a trade-off, or a change of direction), suggest
+  an entry and show it before adding it. Add new entries at the bottom, numbered in order.
+- Each entry uses: **Date**, **Decision**, **Why**, **Alternatives considered**, **Revisit when**.
+- Read the log before planning a new milestone, and point out any "Revisit when" that now applies.
+
 ## How to run
 
 ```
@@ -53,4 +61,5 @@ photo_cleaner/
   duplicates.py   finds exact duplicates (group by size, then SHA-256 fingerprint)
   report.py       prints friendly results
 tests/            automatic checks (unittest)
+docs/             project notes, including the decision log
 ```
