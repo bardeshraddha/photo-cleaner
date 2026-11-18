@@ -94,3 +94,67 @@ Each entry has:
 - **Revisit when:** we see other copy-naming patterns in real folders (for example from
   Google downloads, WhatsApp or phones), or when building the phone app, where the
   phone's photo library gives its own dates.
+
+## 6. Spot forwarded pictures mainly by missing camera details and small size
+
+- **Date:** 18 Nov 2026
+- **Decision:** A picture is "probably from a chat app" when it has no camera details
+  (no camera make or model, no date taken) *and* its longest side is 1,600 pixels or less.
+  It is "very likely" when its name, its folder, or its hidden "made by" label points to
+  a chat or social media app (for example "IMG-…-WA0004.jpg", a "WhatsApp Images" folder,
+  or "Instagram").
+- **Why:** Chat apps remove camera details and shrink pictures when sending. On an iPhone,
+  saved pictures get ordinary names like "IMG_1234.JPG", so names alone won't work in the
+  phone app, but missing camera details will. Both clues are needed together: the Maui
+  photoshoot photos had no camera details either, but they are far too big to be from a chat app.
+- **Alternatives considered:**
+  - *File names only:* very reliable when present, but they disappear on an iPhone.
+  - *Missing camera details only:* would wrongly flag all 176 Maui photos.
+  - *Treat the "Picasa" label as a WhatsApp clue:* seen on a real WhatsApp picture, but not
+    confirmed, and real Picasa users could have it on their own photos. Left out for now.
+- **Revisit when:** we have a real WhatsApp "HD" picture (up to 4,096 pixels, which the size
+  rule won't catch), or we find pictures the rules get wrong.
+
+## 7. Skip HEIC and PNG files when looking for forwarded pictures
+
+- **Date:** 18 Nov 2026
+- **Decision:** The chat-app check only looks at JPG and WebP pictures.
+- **Why:** HEIC is the iPhone camera's own format, and chat apps convert pictures to JPG before
+  sending, so HEIC files are almost always the person's own photos. PNG files are mostly
+  screenshots, which belong to Milestone 3. This also avoids a second add-on for reading HEIC.
+- **Alternatives considered:**
+  - *Check every kind of picture:* more complete, but screenshots would flood the list, and
+    reading HEIC needs another add-on.
+- **Revisit when:** building Milestone 3 (decide where screenshots belong), or if we find chat
+  apps that send HEIC or PNG.
+
+## 8. List all chat-app pictures, with a gentle warning
+
+- **Date:** 18 Nov 2026
+- **Decision:** The report lists every picture that seems to come from a chat app or social
+  media, with the reason for each, and warns that some may be precious family photos.
+- **Why:** The tool can't tell a forwarded "Good morning" greeting from a grandchild's photo sent
+  on WhatsApp. Our real test proved it: a family photo and an Instagram picture looked almost
+  the same to the tool. Showing everything with a clear warning keeps the person in charge.
+- **Alternatives considered:**
+  - *Wait for Milestone 3 and list only text-heavy pictures:* safer, but misses forwarded
+    clutter that has no text.
+  - *Leave out "probably" pictures:* fewer mistakes, but would also miss family-sized clutter.
+- **Revisit when:** Milestone 3 can spot greetings and memes. Then those could be shown
+  separately from pictures that might be family photos.
+
+## 9. Skip the Mac Photos Library when checking a folder
+
+- **Date:** 18 Nov 2026
+- **Decision:** When checking a folder, the tool doesn't go inside any Photos app library
+  (folders ending in ".photoslibrary"). Pointing the tool directly at the library's
+  "originals" folder still works.
+- **Why:** Checking the whole Pictures folder flagged 2,416 pictures as "from chat apps". All
+  of them were the Photos app's own small preview copies inside its library. They aren't real
+  photos, and people shouldn't be encouraged to touch files inside the library, which can
+  damage it.
+- **Alternatives considered:**
+  - *Check the library's "originals" folder automatically:* useful, but most originals may be
+    in iCloud anyway, and the Photos app is better at managing its own photos.
+- **Revisit when:** building the phone app, which will read the phone's photo library through
+  the phone's own tools rather than as files.

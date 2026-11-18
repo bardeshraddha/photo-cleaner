@@ -50,15 +50,17 @@ python3 -m unittest discover tests                  # run the automatic checks
 ```
 
 - Built-in macOS Python 3.9.6. Milestone 1 uses only Python's standard library (nothing to install).
-- Later milestones need Pillow (Milestone 2) and Tesseract OCR (Milestone 3).
+- Milestone 2 needs Pillow (to read picture details): `python3 -m pip install --user Pillow`
+- Milestone 3 will need Tesseract OCR.
 
 ## Project structure
 
 ```
 photo_cleaner/
   __main__.py     starting point (reads the folder path, prints the report)
-  scan.py         finds photo files in a folder
+  scan.py         finds photo files in a folder (skips Photos app libraries)
   duplicates.py   finds exact duplicates (group by size, then SHA-256 fingerprint)
+  forwarded.py    finds pictures from chat apps (camera details, size and name clues)
   report.py       prints friendly results
 tests/            automatic checks (unittest)
 docs/             project notes, including the decision log

@@ -3,6 +3,14 @@
 import os
 import sys
 
+try:
+    from .forwarded import find_forwarded
+except ImportError:
+    print("Photo Cleaner needs a free add-on called Pillow to look inside pictures.")
+    print("To install it, type this and press Return:")
+    print("  python3 -m pip install --user Pillow")
+    sys.exit(1)
+
 from .duplicates import find_duplicates
 from .report import build_report
 from .scan import find_photos
@@ -26,12 +34,13 @@ def main(args):
     try:
         photos = find_photos(folder)
         groups = find_duplicates(photos)
+        forwarded = find_forwarded(folder, photos)
     except KeyboardInterrupt:
         print("\nStopped. Nothing has been changed.")
         return 1
 
     print()
-    print(build_report(folder, len(photos), groups))
+    print(build_report(folder, len(photos), groups, forwarded))
     return 0
 
 
