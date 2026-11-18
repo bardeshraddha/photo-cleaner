@@ -4,7 +4,7 @@ import os
 import tempfile
 import unittest
 
-from photo_cleaner.duplicates import extra_space, find_duplicates
+from photo_cleaner.duplicates import extra_space, find_duplicates, looks_like_copy
 from photo_cleaner.report import build_report
 from photo_cleaner.scan import find_photos
 
@@ -72,6 +72,26 @@ class FindDuplicatesTest(unittest.TestCase):
         groups = find_duplicates(find_photos(self.folder))
 
         self.assertEqual(groups[0][0], older)
+
+    def test_name_that_looks_like_a_copy_is_not_suggested_to_keep(self):
+        # The real case from the Maui folder: all copies have exactly the same date.
+        same_time = 1_600_000_000
+        for name in ["shraddha 3 copy.jpg", "shraddha 3.jpg",
+                     "shraddha 3 (1).jpg", "Copy of shraddha 3.jpg"]:
+            path = self.make_file(name, b"maui photo")
+            os.utime(path, (same_time, same_time))
+
+        groups = find_duplicates(find_photos(self.folder))
+
+        self.assertEqual(os.path.basename(groups[0][0]), "shraddha 3.jpg")
+
+    def test_copy_names_are_recognised(self):
+        for name in ["beach copy.jpg", "beach copy 2.jpg", "beach (1).jpg",
+                     "Copy of beach.jpg", "BEACH COPY.JPG"]:
+            self.assertTrue(looks_like_copy(name), name)
+        # Ordinary names must NOT be mistaken for copies.
+        for name in ["beach.jpg", "Holiday-2023.jpg", "IMG-20230101-WA0004.jpg", "copycat.jpg"]:
+            self.assertFalse(looks_like_copy(name), name)
 
     def test_scan_does_not_change_any_file(self):
         self.make_file("a.jpg", b"same photo")

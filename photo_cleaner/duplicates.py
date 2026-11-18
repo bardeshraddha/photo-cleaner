@@ -2,10 +2,35 @@
 
 import hashlib
 import os
+import re
 from collections import defaultdict
 
 # Read files 1 MB at a time, so even very large files don't fill up the computer's memory.
 CHUNK_SIZE = 1024 * 1024
+
+# Name patterns that computers use when they make a copy of a file:
+#   "photo copy.jpg", "photo copy 2.jpg"   (Mac)
+#   "photo (1).jpg"                         (web browsers, Windows)
+#   "Copy of photo.jpg"                     (Google Drive, older Windows)
+# Capital or small letters don't matter.
+COPY_NAME = re.compile(r"( copy( \d+)?| \(\d+\))$|^copy of ", re.IGNORECASE)
+
+
+def looks_like_copy(path):
+    """True if the file's name looks like one a computer gives to a copy."""
+    name = os.path.splitext(os.path.basename(path))[0]
+    return bool(COPY_NAME.search(name))
+
+
+def keep_first(path):
+    """How to order identical copies, so the one to keep comes first.
+
+    1. Oldest first (the oldest is most likely the original).
+    2. If the dates are the same, a name that doesn't look like a copy comes first.
+    3. Then the shorter name, then alphabetical order, so the result is always the same.
+    """
+    name = os.path.basename(path)
+    return (os.path.getmtime(path), looks_like_copy(path), len(name), path)
 
 
 def fingerprint(path):
@@ -24,7 +49,7 @@ def find_duplicates(paths):
     """Group files with identical contents.
 
     Returns a list of groups. Each group is a list of two or more identical files,
-    oldest first (the oldest is most likely the original). The groups that would
+    with the one we suggest keeping first (see keep_first). The groups that would
     free up the most space come first. Files that can't be read are skipped.
     """
     # Round 1: files of different sizes can't be identical, so group by size first.
@@ -48,7 +73,7 @@ def find_duplicates(paths):
                 continue
         for group in by_fingerprint.values():
             if len(group) > 1:
-                groups.append(sorted(group, key=lambda p: (os.path.getmtime(p), p)))
+                groups.append(sorted(group, key=keep_first))
 
     groups.sort(key=lambda group: (-extra_space(group), group[0]))
     return groups

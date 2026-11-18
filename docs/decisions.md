@@ -73,3 +73,24 @@ Each entry has:
     to build on.
 - **Revisit when:** planning the phone app. Duplicates may not need to be a main feature there,
   since the iPhone already handles it. It could become a small extra, or be left out.
+
+## 5. When copies have the same date, keep the one with the "original" name
+
+- **Date:** 18 Nov 2026
+- **Decision:** We still suggest keeping the oldest copy. But when copies have exactly the
+  same date, we prefer the one whose name doesn't look like a copy (such as "copy",
+  "copy 2", "(1)" or "Copy of ..."). If that still doesn't decide it, we prefer the
+  shorter name.
+- **Why:** Testing on a real folder (the Maui photoshoot) suggested keeping
+  "shraddha 3 copy.jpg" and removing "shraddha 3.jpg". Both had the same date, so the
+  tool fell back to alphabetical order, which put the "copy" first. That looks backwards
+  and could confuse or worry our users.
+- **Alternatives considered:**
+  - *Alphabetical order only (what we had):* simple, but it gave the confusing result above.
+  - *Decide by name only, ignoring dates:* a renamed original (like "Grandma's birthday.jpg")
+    could lose to a newer copy with a plainer name. The date is a stronger clue.
+  - *Also treat names ending in "-1" as copies:* rejected, because ordinary names like
+    "Holiday-2023.jpg" would be mistaken for copies.
+- **Revisit when:** we see other copy-naming patterns in real folders (for example from
+  Google downloads, WhatsApp or phones), or when building the phone app, where the
+  phone's photo library gives its own dates.
